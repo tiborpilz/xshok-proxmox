@@ -33,18 +33,21 @@ echo -e "Acquire::ForceIPv4 \"true\";\\n" > /etc/apt/apt.conf.d/99force-ipv4
 
 ## disable enterprise proxmox repo
 if [ -f /etc/apt/sources.list.d/pve-enterprise.list ]; then
-  echo -e "#deb https://enterprise.proxmox.com/debian stretch pve-enterprise\\n" > /etc/apt/sources.list.d/pve-enterprise.list
+  echo -e "#deb https://enterprise.proxmox.com/debian buster pve-enterprise\\n" > /etc/apt/sources.list.d/pve-enterprise.list
 fi
 ## enable public proxmox repo
 if [ ! -f /etc/apt/sources.list.d/proxmox.list ] && [ ! -f /etc/apt/sources.list.d/pve-public-repo.list ] && [ ! -f /etc/apt/sources.list.d/pve-install-repo.list ] ; then
-  echo -e "deb http://download.proxmox.com/debian stretch pve-no-subscription\\n" > /etc/apt/sources.list.d/pve-public-repo.list
+  echo -e "deb http://download.proxmox.com/debian buster pve-no-subscription\\n" > /etc/apt/sources.list.d/pve-public-repo.list
 fi
 
 ## Add non-free to sources
 sed -i "s/main contrib/main non-free contrib/g" /etc/apt/sources.list
 
-## Add the latest ceph provided by proxmox
-echo "deb http://download.proxmox.com/debian/ceph-luminous stretch main" > /etc/apt/sources.list.d/ceph.list
+## Change debian version
+sed -i 's/stretch/buster/g' /etc/apt/sources.list
+
+## Add Ceph
+echo "deb http://download.proxmox.com/debian/ceph-luminous buster main" > /etc/apt/sources.list.d/ceph.list
 
 ## Refresh the package lists
 apt-get update > /dev/null
@@ -70,6 +73,7 @@ pveam update
 
 ## Install zfs-auto-snapshot
 /usr/bin/env DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::='--force-confdef' install zfs-auto-snapshot
+
 # make 5min snapshots , keep 12 5min snapshots
 if [ -f "/etc/cron.d/zfs-auto-snapshot" ] ; then
   sed -i 's|--keep=[0-9]*|--keep=12|g' /etc/cron.d/zfs-auto-snapshot
@@ -234,26 +238,6 @@ if [ -f "/usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js" ] ; then
 sed -i "s/data.status !== 'Active'/false/g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
 EOF
   chmod 755 /etc/cron.daily/proxmox-nosub
-fi
-
-## Pretty MOTD BANNER
-if [ -z "${NO_MOTD_BANNER}" ] ; then
-  if ! grep -q https "/etc/motd" ; then
-    cat << 'EOF' > /etc/motd.new
-	   This system is optimised by:            https://eXtremeSHOK.com
-	     __   ___                            _____ _    _  ____  _  __
-	     \ \ / / |                          / ____| |  | |/ __ \| |/ /
-	  ___ \ V /| |_ _ __ ___ _ __ ___   ___| (___ | |__| | |  | | ' /
-	 / _ \ > < | __| '__/ _ \ '_ ` _ \ / _ \\___ \|  __  | |  | |  <
-	|  __// . \| |_| | |  __/ | | | | |  __/____) | |  | | |__| | . \
-	 \___/_/ \_\\__|_|  \___|_| |_| |_|\___|_____/|_|  |_|\____/|_|\_\
-
-
-EOF
-
-    cat /etc/motd >> /etc/motd.new
-    mv /etc/motd.new /etc/motd
-  fi
 fi
 
 ## Increase max user watches

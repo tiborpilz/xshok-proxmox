@@ -73,7 +73,7 @@ echo "Auto detecting existing network settings"
 default_interface="$(ip route | awk '/default/ { print $5 }' | grep -v "vmbr")"
 if [ "$default_interface" == "" ]; then
   #filter the interfaces to get the default interface and which is not down and not a virtual bridge
-  default_interface="$(ip link | sed -e '/state DOWN / { N; d; }' | sed -e '/veth[0-9].*:/ { N; d; }' | sed -e '/vmbr[0-9].*:/ { N; d; }' | sed -e '/tap[0-9].*:/ { N; d; }' | sed -e '/lo:/ { N; d; }' | head -n 1 | cut -d':' -f 2 | xargs)"
+  default_interface="$(ip link | sed -e '/state DOWN / { N; d; }' | sed -e '/veth[0-9].*:/ { N; d; }' | sed -e '/vmbr[0-9].*:/ { N; d; }' | sed -e '/tap[0-9].*:/ { N; d; }' | sed -e '/lo:/ { N; d; }' | sed -e '/eno[0-9].*:/ { N; d; }' | head -n 1 | cut -d':' -f 2 | xargs)"
 fi
 if [ "$default_interface" == "" ]; then
   echo "ERROR: Could not detect default interface"

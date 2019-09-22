@@ -98,10 +98,10 @@ echo "Add Proxmox repo to APT sources"
 cat <<EOF >> /etc/apt/sources.list.d/proxmox.list
 
 # PVE packages provided by proxmox.com"
-deb http://mirror.hetzner.de/debian/pve stretch pve-no-subscription
-deb http://download.proxmox.com/debian/pve stretch pve-no-subscription
+deb http://mirror.hetzner.de/debian/pve buster pve-no-subscription
+deb http://download.proxmox.com/debian/pve buster pve-no-subscription
 EOF
-wget -q "http://download.proxmox.com/debian/proxmox-ve-release-5.x.gpg" -O /etc/apt/trusted.gpg.d/proxmox-ve-release-5.x.gpg
+wget -q "http://download.proxmox.com/debian/proxmox-ve-release-6.x.gpg" -O /etc/apt/trusted.gpg.d/proxmox-ve-release-6.x.gpg
 apt-get update > /dev/null
 
 echo "Upgrading system"
@@ -136,7 +136,7 @@ update-grub
 echo "Done installing Proxmox VE"
 
 echo "Fetching postinstall script"
-wget https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/install-post.sh -c -O install-post.sh && chmod +x install-post.sh
+wget https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/install-post.sh -c -O install-post.sh && chmod +x install-post.sh
 if grep -q '#!/usr/bin/env bash' "install-post.sh"; then
   bash install-post.sh
 fi

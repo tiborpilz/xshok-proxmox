@@ -1,5 +1,6 @@
-# xshok-proxmox :: eXtremeSHOK.com Proxmox (pve)
 
+# xshok-proxmox :: eXtremeSHOK.com Proxmox (pve)
+### FORK
 ## Optimization / Post Install Script (install-post.sh aka postinstall.sh) *run once*
 *not required if server setup with install-hetzner.sh*
 * 'reboot-quick' command which uses kexec to boot the latest kernel set in the boot loader
@@ -22,7 +23,7 @@
 * ZFS Tuning, set prefetch method and max write speed to l2arc
 * Enable TCP BBR congestion control, improves overall network throughput
 
-https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/install-post.sh
+https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/install-post.sh
 
 return value is 0
 
@@ -56,7 +57,7 @@ Recommeneded partitioning scheme:
 * Wait a few mins
 * Connect via ssh/terminal to the rescue system running on your server and run the following
 ````
-wget https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/install-hetzner.sh -c -O install-hetzner.sh && chmod +x install-hetzner.sh
+wget https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/install-hetzner.sh -c -O install-hetzner.sh && chmod +x install-hetzner.sh
 ./install-hetzner.sh
 ````
 * Reboot
@@ -70,7 +71,7 @@ wget https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/lvm-2-zf
 * Connect via ssh/terminal to the new Proxmox system running on your server and run the following
 ## NETWORKING (vmbr0 vmbr1)
 ```
-wget https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/network-configure.sh -c -O network-configure.sh && chmod +x network-configure.sh
+wget https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/network-configure.sh -c -O network-configure.sh && chmod +x network-configure.sh
 ./network-configure.sh && rm network-configure.sh
 ```
 * Reboot
@@ -95,7 +96,7 @@ Select install for the specific server, via the ovh manager
 * * 3	LV	xfs	/var/lib/vz	data	1	REMAINING GB *(use all the remaining space)*
 * --NEXT-->
 * Hostname: server.fqdn.com
-* Installation script (URL): https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/install-post.sh
+* Installation script (URL): https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/install-post.sh
 * Script return value: 0
 * SSH keys: *(always suggested, however if this value is used a webinterface login will not work without setting a root password in shell)*
 * --CONFIRM-->
@@ -123,14 +124,14 @@ Assumptions: Proxmox installed, SSD raid1 partitions mounted as /xshok/zfs-slog 
 
 **NOTE: WILL  DESTROY ALL DATA ON SPECIFIED DEVICES**
 ```
-wget https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/createzfs.sh -c -O createzfs.sh && chmod +x createzfs.sh
+wget https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/createzfs.sh -c -O createzfs.sh && chmod +x createzfs.sh
 ./createzfs.sh poolname /dev/device1 /dev/device2
 ```
 ## Create ZFS cache and slog from /xshok/zfs-cache and /xshok/zfs-slog partitions and adds them to a zpool (xshok_slog_cache-2-zfs.sh) *optional*
 
 **NOTE: WILL  DESTROY ALL DATA ON SPECIFIED PARTITIONS**
 ```
-wget https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/xshok_slog_cache-2-zfs.sh -c -O xshok_slog_cache-2-zfs.sh && chmod +x xshok_slog_cache-2-zfs.sh
+wget https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/xshok_slog_cache-2-zfs.sh -c -O xshok_slog_cache-2-zfs.sh && chmod +x xshok_slog_cache-2-zfs.sh
 ./xshok_slog_cache-2-zfs.sh poolname
 ```
 * Reboot
@@ -144,14 +145,14 @@ Assumptions: Debian9 installed with a valid FQDN hostname set
 * Will automatically generate a correct /etc/hosts
 * Note: will automatically run the install-post.sh script
 ```
-curl -O https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/debian9-2-proxmox5.sh && chmod +x debian9-2-proxmox5.sh
+curl -O https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/debian9-2-proxmox5.sh && chmod +x debian9-2-proxmox5.sh
 ./debian9-2-proxmox5.sh
 ```
 
 ## Enable Docker support for an LXC container (pve-enable-lxc-docker.sh) *optional*
 There can be security implications as the LXC container is running in a higher privileged mode.
 ```
-curl https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/pve-enable-lxc-docker.sh --output /usr/sbin/pve-enable-lxc-docker && chmod +x /usr/sbin/pve-enable-lxc-docker
+curl https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/pve-enable-lxc-docker.sh --output /usr/sbin/pve-enable-lxc-docker && chmod +x /usr/sbin/pve-enable-lxc-docker
 pve-enable-lxc-docker container_id
 ```
 
@@ -173,7 +174,7 @@ Converts the a MDADM BASED LVM into a ZFS raid 1 (mirror)
 
 **NOTE: WILL  DESTROY ALL DATA ON LVM_MOUNT_POINT**
 ```
-wget https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/lvm-2-zfs.sh -c -O lvm-2-zfs.sh && chmod +x lvm-2-zfs.sh
+wget https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/lvm-2-zfs.sh -c -O lvm-2-zfs.sh && chmod +x lvm-2-zfs.sh
 ./lvm-2-zfs.sh
 ```
 
@@ -188,7 +189,7 @@ Creates a zfs pool from specified devices
 
 **NOTE: WILL  DESTROY ALL DATA ON SPECIFIED DEVICES**
 ```
-wget https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/createzfs.sh -c -O createzfs.sh && chmod +x createzfs.sh
+wget https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/createzfs.sh -c -O createzfs.sh && chmod +x createzfs.sh
 ./createzfs.sh poolname /dev/device1 /dev/device2
 ```
 
@@ -198,7 +199,7 @@ Creates a zfs pool from specified devices
 
 **NOTE: WILL  DESTROY ALL DATA ON SPECIFIED PARTITIONS**
 ```
-wget https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/xshok_slog_cache-2-zfs.sh -c -O xshok_slog_cache-2-zfs.sh && chmod +x xshok_slog_cache-2-zfs.sh
+wget https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/xshok_slog_cache-2-zfs.sh -c -O xshok_slog_cache-2-zfs.sh && chmod +x xshok_slog_cache-2-zfs.sh
 ./xshok_slog_cache-2-zfs.sh poolname
 ```
 
@@ -223,7 +224,7 @@ ALSO CREATES A NAT Private Network as vmbr1
  NOTE: WILL OVERWRITE /etc/network/interfaces
  A backup will be created as /etc/network/interfaces.timestamp
 ```
-wget https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/network-configure.sh -c -O network-configure.sh && chmod +x network-configure.sh
+wget https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/network-configure.sh -c -O network-configure.sh && chmod +x network-configure.sh
 ./network-configure.sh && rm network-configure.sh
 ```
 
@@ -237,7 +238,7 @@ wget https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/network-
 ## Create Private mesh vpn/network (tincvpn.sh)
 tinc private mesh vpn/network which supports multicast, ideal for private cluster communication
 ```
-wget https://raw.githubusercontent.com/extremeshok/xshok-proxmox/master/tincvpn.sh -c -O tincvpn.sh && chmod +x tincvpn.sh
+wget https://raw.githubusercontent.com/tiborpilz/xshok-proxmox/master/tincvpn.sh -c -O tincvpn.sh && chmod +x tincvpn.sh
 ./tincvpn.sh -h
 ```
 ### Example for 3 node Cluster
